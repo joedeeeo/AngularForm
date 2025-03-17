@@ -1,0 +1,77 @@
+import { Component } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Userregisration } from '../model/userregisration';
+
+@Component({
+  selector: 'app-sign-up',
+  standalone: false,
+  templateUrl: './sign-up.component.html',
+  styleUrl: './sign-up.component.css'
+})
+export class SignUpComponent {
+regObj= new Userregisration("vikram","1542","v@gmail.com",10)
+
+  saveInformation(){
+    // console.log(formInfo.value)
+    // const regObj=new Userregisration(formInfo.value.uname,formInfo.value.psw,formInfo.value.email,formInfo.value.age)
+    // console.log("registration obj :",regObj)
+    console.log(this.regObj)
+  }
+
+}
+
+
+
+
+
+export class Userregisration {
+
+    constructor(
+        public uname:string,
+        public psw:string,
+        public email:string,
+        public age:number
+    ){
+    }
+}
+
+
+
+
+
+
+signup.component
+<div class="container">
+    <h2>Horizontal form</h2>
+    <!-- FormData: {{formData | json }} -->
+    <form class="form-horizontal"  (ngSubmit)="saveInformation()">  
+      <!-- //#formData="ngForm" -->
+      <!-- FormData: {{formData.value| json }} <br> -->
+      ObjectData: {{regObj | json }}
+      <div class="form-group">
+        <label class="control-label" for="uname">UserName:</label>
+          <input type="text" class="form-control" id="uname" [(ngModel)]="regObj.uname" placeholder="Enter user name" name="uname" >
+      </div>
+      
+      <div class="form-group">
+        <label class="control-label" for="psw">Password:</label>
+          <input type="password" class="form-control" id="psw" [(ngModel)]="regObj.psw" placeholder="Enter password" name="psw" >
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="email">Email:</label>
+          <input type="email" class="form-control" id="email" [(ngModel)]="regObj.email" placeholder="Enter email" name="email" >
+      </div>
+
+      <div class="form-group">
+        <label class="control-label" for="age">Age:</label>
+          <input type="number" class="form-control" id="age" [(ngModel)]="regObj.age" placeholder="Enter age" name="age" >
+      </div>
+
+      <div class="form-group">        
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-default">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
