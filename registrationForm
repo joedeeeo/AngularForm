@@ -1,3 +1,232 @@
+//index.html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>RegistrationForm</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>
+
+
+//app.modules.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { SignUpComponent } from './sign-up/sign-up.component';
+import { FormsModule } from '@angular/forms';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    SignUpComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+
+//class
+//model/userregistration.ts
+export class Userregisration {
+
+    constructor(
+        public name: string = '',
+        public dob: string = '',
+        public email: string = '',
+        public password: string = '',
+        public retypePwd: string = '',
+        public gender: string = '',
+        public hobbies: {
+          cricket: boolean;
+          tennis: boolean;
+          badminton: boolean;
+          swimming: boolean;
+          reading: boolean;
+          cycling: boolean;
+        } = {
+          cricket: false,
+          tennis: false,
+          badminton: false,
+          swimming: false,
+          reading: false,
+          cycling: false
+        },
+        public state: string = '',
+        public address: string = ''
+      ){
+    }
+}
+
+
+
+//signup Component
+//signup.component
+<div class="container">
+  <div class="row">
+      <div class="col-md-6">
+          <div class="text-center bg-primary p-3">
+              <h2>Sign Up Form</h2>
+          </div>
+
+          <form class="form-horizontal" #formData="ngForm" (ngSubmit)="saveInformation()">
+             
+              Object Data : {{ signUpObj | json }}
+              <br>
+
+              <!-- Name Field -->
+              <div class="form-group">
+                  <label class="control-label" for="name">Name:</label>
+                  <input type="text" class="form-control" [class.is-invalid]="name.touched && name.invalid"
+                  id="name" #name="ngModel" [(ngModel)]="signUpObj.name" placeholder="Enter Name" name="name" minlength="5" required>
+              </div>
+              <div class="alert alert-danger" *ngIf="name.touched && name.invalid">
+                  <div *ngIf="name.errors && name.errors['required']">
+                      This field is required !!
+                  </div>
+                  <div *ngIf="name.errors && name.errors['minlength']">
+                      Name must be at least 5 characters long.
+                  </div>
+              </div>
+
+              <!-- Date of Birth Field -->
+              <div class="form-group">
+                  <label class="control-label" for="dob">Date of Birth:</label>
+                  <input type="date" class="form-control" [class.is-invalid]="dob.touched && dob.invalid"
+                  id="dob" #dob="ngModel" [(ngModel)]="signUpObj.dob" name="dob" required>
+              </div>
+              <div class="alert alert-danger" *ngIf="dob.touched && dob.invalid">
+                  <div *ngIf="dob.errors && dob.errors['required']">
+                      This field is required !!
+                  </div>
+              </div>
+
+              <!-- Email Field -->
+              <div class="form-group">
+                  <label class="control-label" for="email">Email:</label>
+                  <input type="email" class="form-control" [class.is-invalid]="email.touched && email.invalid"
+                  id="email" #email="ngModel" [(ngModel)]="signUpObj.email" placeholder="Enter Email" name="email" required email>
+              </div>
+              <div class="alert alert-danger" *ngIf="email.touched && email.invalid">
+                  <div *ngIf="email.errors && email.errors['required']">
+                      This field is required !!
+                  </div>
+                  <div *ngIf="email.errors && email.errors['email']">
+                      Please enter a valid email !!
+                  </div>
+              </div>
+
+              <!-- Password Field -->
+              <div class="form-group">
+                  <label class="control-label" for="pwd">Password:</label>
+                  <input type="password" class="form-control" [class.is-invalid]="pwd.touched && pwd.invalid"
+                  id="pwd" #pwd="ngModel" [(ngModel)]="signUpObj.password" placeholder="Enter Password" name="password" required>
+              </div>
+              <div class="alert alert-danger" *ngIf="pwd.touched && pwd.invalid">
+                  <div *ngIf="pwd.errors && pwd.errors['required']">
+                      This field is required !!
+                  </div>
+              </div>
+
+              <!-- Retype Password Field -->
+              <div class="form-group">
+                  <label class="control-label" for="retypePwd">Retype Password:</label>
+                  <input type="password" class="form-control" [class.is-invalid]="retypePwd.touched && retypePwd.invalid"
+                  id="retypePwd" #retypePwd="ngModel" [(ngModel)]="signUpObj.retypePwd" placeholder="Retype Password" name="retypePwd" required>
+              </div>
+              <div class="alert alert-danger" *ngIf="retypePwd.touched && retypePwd.invalid">
+                  <div *ngIf="retypePwd.errors && retypePwd.errors['required']">
+                      This field is required !!
+                  </div>
+                  <div *ngIf="retypePwd.value !== pwd.value">
+                      Passwords do not match!!
+                  </div>
+              </div>
+
+              <!-- Gender Field -->
+              <div class="form-group">
+                  <label class="control-label">Gender:</label><br>
+                  <label><input type="radio" [class.is-invalid]="gender.touched && gender.invalid"
+                  id="male" #gender="ngModel" [(ngModel)]="signUpObj.gender" name="gender" value="Male" required> Male</label>
+                  <label><input type="radio" [class.is-invalid]="gender.touched && gender.invalid"
+                  id="female" #gender="ngModel" [(ngModel)]="signUpObj.gender" name="gender" value="Female" required> Female</label>
+              </div>
+              <div class="alert alert-danger" *ngIf="gender.touched && gender.invalid">
+                  <div *ngIf="gender.errors && gender.errors['required']">
+                      This field is required !!
+                  </div>
+              </div>
+
+              <!-- Hobbies Field -->
+              <div class="form-group">
+                  <label class="control-label">Hobbies:</label><br>
+                  <label><input type="checkbox" [(ngModel)]="signUpObj.hobbies.cricket" name="hobbies" > Cricket</label>
+                  <label><input type="checkbox" [(ngModel)]="signUpObj.hobbies.tennis" name="hobbies" > Tennis</label>
+                  <label><input type="checkbox" [(ngModel)]="signUpObj.hobbies.badminton" name="hobbies" > Badminton</label>
+                  <label><input type="checkbox" [(ngModel)]="signUpObj.hobbies.swimming" name="hobbies" > Swimming</label>
+                  <label><input type="checkbox" [(ngModel)]="signUpObj.hobbies.reading" name="hobbies" > Reading</label>
+                  <label><input type="checkbox" [(ngModel)]="signUpObj.hobbies.cycling" name="hobbies" > Cycling</label>
+              </div>
+
+              <!-- State Field (DropDown and Datalist) -->
+              <div class="form-group">
+                  <label class="control-label" for="state">State:</label>
+                  <select class="form-control" [class.is-invalid]="state.touched && state.invalid" id="state"
+                  #state="ngModel" [(ngModel)]="signUpObj.state" name="state" required>
+                      <option value="" disabled>Select State</option>
+                      <option value="Gujarat">Gujarat</option>
+                      <option value="UP">Uttar Pradesh</option>
+                      <option value="MP">Madhya Pradesh</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Karnataka">Indor</option>
+                  </select>
+                  <div class="alert alert-danger" *ngIf="state.touched && state.invalid">
+                      <div *ngIf="state.errors && state.errors['required']">
+                          This field is required !!
+                      </div>
+                  </div>
+              </div>
+
+              <!-- Address Field -->
+              <div class="form-group">
+                  <label class="control-label" for="address">Address:</label>
+                  <textarea class="form-control" [class.is-invalid]="address.touched && address.invalid"
+                  id="address" #address="ngModel" [(ngModel)]="signUpObj.address" placeholder="Enter Address" name="address" required></textarea>
+              </div>
+              <div class="alert alert-danger" *ngIf="address.touched && address.invalid">
+                  <div *ngIf="address.errors && address.errors['required']">
+                      This field is required !!
+                  </div>
+              </div>
+
+              <br>
+              <div class="form-group">
+                  Form Status: {{formData.valid}}
+                  <button type="submit" class="btn btn-primary col-md-12" [disabled]="formData.invalid">Submit</button>
+              </div>
+          </form>
+      </div>
+  </div>
+</div>
+
+
+
+//signup.component.ts
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Userregisration } from '../model/userregisration';
@@ -9,69 +238,159 @@ import { Userregisration } from '../model/userregisration';
   styleUrl: './sign-up.component.css'
 })
 export class SignUpComponent {
-regObj= new Userregisration("vikram","1542","v@gmail.com",10)
+// regObj= new Userregisration()
+signUpObj = new Userregisration();
 
-  saveInformation(){
-    // console.log(formInfo.value)
-    // const regObj=new Userregisration(formInfo.value.uname,formInfo.value.psw,formInfo.value.email,formInfo.value.age)
-    // console.log("registration obj :",regObj)
-    console.log(this.regObj)
+  // saveInformation(){
+  //   // console.log(formInfo.value)
+  //   // const regObj=new Userregisration(formInfo.value.uname,formInfo.value.psw,formInfo.value.email,formInfo.value.age)
+  //   // console.log("registration obj :",regObj)
+  //   console.log(this.regObj)
+  // }
+
+
+  saveInformation() {
+    if (this.signUpObj.password !== this.signUpObj.retypePwd) {
+      alert('Passwords do not match!');
+      return;
+    }
+ 
+    console.log('Form Submitted', this.signUpObj);
+    // You can handle the form submission here, like calling an API to save the data.
   }
-
 }
 
 
-
-
-
-export class Userregisration {
-
-    constructor(
-        public uname:string,
-        public psw:string,
-        public email:string,
-        public age:number
-    ){
+/* Global Styling */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #5e84c7;
+    color: #5255f1;
+}
+ 
+.container {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+ 
+/* Header Styling */
+.bg-primary {
+    background-color: #294461;
+    color: white;
+    border-radius: 50px;
+    padding: 20px;
+}
+ 
+h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+ 
+/* Form Styling */
+.form-horizontal {
+    background-color: rgb(181, 176, 243);
+    padding: 30px;
+    border-radius: 50px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+ 
+/* Form Group Styling */
+.form-group {
+    margin-bottom: 20px;
+}
+ 
+/* Label Styling */
+label.control-label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: block;
+    font-size: 1rem;
+}
+ 
+/* Input Field Styling */
+input.form-control, select.form-control, textarea.form-control {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+ 
+input[type="date"] {
+    height: 40px;
+}
+ 
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+ 
+/* Invalid Input Styling */
+input.form-control.is-invalid, select.form-control.is-invalid, textarea.form-control.is-invalid {
+    border-color: #dc3545;
+    background-color: #f8d7da;
+}
+ 
+.alert {
+    margin-top: 5px;
+    padding: 10px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border-radius: 5px;
+}
+ 
+/* Checkbox Styling */
+.checkbox label {
+    font-size: 1rem;
+    margin-right: 15px;
+}
+ 
+.checkbox {
+    display: flex;
+    align-items:start;
+}
+ 
+/* Radio Button Styling */
+input[type="radio"] {
+    margin-right: 10px;
+}
+ 
+/* Button Styling */
+button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border: none;
+    padding: 15px;
+    border-radius: 5px;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+ 
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+ 
+button[type="submit"]:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+ 
+/* Responsive Design */
+@media (max-width: 768px) {
+    .col-md-6 {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+ 
+    h2 {
+        font-size: 1.5rem;
+    }
+ 
+    .form-horizontal {
+        padding: 20px;
     }
 }
-
-
-
-
-
-
-signup.component
-<div class="container">
-    <h2>Horizontal form</h2>
-    <!-- FormData: {{formData | json }} -->
-    <form class="form-horizontal"  (ngSubmit)="saveInformation()">  
-      <!-- //#formData="ngForm" -->
-      <!-- FormData: {{formData.value| json }} <br> -->
-      ObjectData: {{regObj | json }}
-      <div class="form-group">
-        <label class="control-label" for="uname">UserName:</label>
-          <input type="text" class="form-control" id="uname" [(ngModel)]="regObj.uname" placeholder="Enter user name" name="uname" >
-      </div>
-      
-      <div class="form-group">
-        <label class="control-label" for="psw">Password:</label>
-          <input type="password" class="form-control" id="psw" [(ngModel)]="regObj.psw" placeholder="Enter password" name="psw" >
-      </div>
-
-      <div class="form-group">
-        <label class="control-label" for="email">Email:</label>
-          <input type="email" class="form-control" id="email" [(ngModel)]="regObj.email" placeholder="Enter email" name="email" >
-      </div>
-
-      <div class="form-group">
-        <label class="control-label" for="age">Age:</label>
-          <input type="number" class="form-control" id="age" [(ngModel)]="regObj.age" placeholder="Enter age" name="age" >
-      </div>
-
-      <div class="form-group">        
-        <div class="col-sm-offset-2 col-sm-10">
-          <button type="submit" class="btn btn-default">Submit</button>
-        </div>
-      </div>
-    </form>
-  </div>
